@@ -6,6 +6,29 @@
     "bin": {
         "ai-commit-message": "./bin/cli.js"
     },
+    "keywords": [
+        "AI commit message generator",
+        "npm package",
+        "npm package for commit messages",
+        "ai generate commit messages",
+        "generate commit messages with AI",
+        "Gemini API",
+        "git commit messages",
+        "conventional commits",
+        "automated commit messages",
+        "CLI tools for developers",
+        "Node.js commit message generator",
+        "GitHub actions",
+        "open source commit message tool",
+        "Gemini Pro API integration",
+        "AI-powered development tools",
+        "automated software engineering",
+        "commit message best practices",
+        "AI in software development",
+        "git automation tools",
+        "developer productivity tools",
+        "AI-driven commit message generation"
+    ],
     "scripts": {
         "test": "jest",
         "start": "node ./bin/cli.js"
