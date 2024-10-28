@@ -21,20 +21,8 @@ jobs:
 
       - name: Install dependencies
         run: npm i
-        
-      - name: Check if version exists
-        id: check
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if npm view ai-commit-message@$VERSION &>/dev/null; then
-            echo "Version $VERSION already exists, skipping publish"
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
 
       - name: Publish to NPM
-        if: steps.check.outputs.exists == 'false'
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm publish --access public
