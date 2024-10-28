@@ -15,6 +15,7 @@
 - 🎨 Beautiful CLI with colored output
 
 ## 🚀 Installation
+
 ```bash
 npm install -g ai-commit-message
 ```
@@ -24,11 +25,13 @@ npm install -g ai-commit-message
 1. Get your Gemini API key from [Get a Gemini API key](https://makersuite.google.com/app/apikey)
 
 2. Configure the API key:
+
 ```bash
 ai-commit-message config <your-api-key>
 ```
 
 Alternatively, set the `GEMINI_API_KEY` environment variable.
+
 ```bash
 export GEMINI_API_KEY=<your-api-key>
 ```
@@ -36,21 +39,23 @@ export GEMINI_API_KEY=<your-api-key>
 ## 💫 Usage
 
 ### Generate a Commit Message
+
 ```bash
 # Stage your changes first
 git add .
-```
-### Generate a commit message
-```bash
+
+# NOW, Generate a commit message
 ai-commit-message
 ```
 
 ### Generate and auto-commit
+
 ```bash
 ai-commit-message -c
 ```
 
 ### CLI Options
+
 ```bash
 Commands:
   config <key>        Configure Gemini API key
@@ -91,6 +96,7 @@ Commands:
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
+
 - 🐛 Report bugs
 - 💡 Suggest features
 - 🔧 Submit PRs
