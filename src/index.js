@@ -32,7 +32,7 @@ async function generateCommitMessage(autoCommit = false) {
   const diff = await getDiff();
 
   const genAI = new GoogleGenerativeAI(getApiKey());
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-002" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" }); // Used for token count
 
   const prompt = `Generate a concise, meaningful git commit message for the following changes. 
 Follow the Conventional Commits format (type(scope): description). 
@@ -40,9 +40,17 @@ The message should be under 50 characters.
 Changes:
 ${diff}`;
 
-  const result = await model.generateContent(prompt, {
+  // Check token count before generating content
+  const tokenCount = await model.countTokens(prompt);
+  
+  // If token count is greater than or equal to 1M, switch to pro model
+  const finalModel = tokenCount.totalTokens >= 1000000 ? 
+    (console.log(chalk.yellow(`Switching to pro model: gemini-1.5-pro as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-pro" })) : 
+    (console.log(chalk.green(`Using flash model: gemini-1.5-flash as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-flash" }));
+
+  const result = await finalModel.generateContent(prompt, {
     maxOutputTokens: 50,
-    temperature: 0.7,
+    temperature: 1,
   });
   const message = result.response.text().trim();
 
