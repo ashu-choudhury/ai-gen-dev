@@ -19,7 +19,7 @@ async function getDiff() {
       "No staged changes found. Stage your changes using:\n" +
         "┌───────────────────────────────────────────────┐\n" +
         "│ git add                            OR         │\n" +
-        "│ git add .                           OR        │\n" +
+        "│ git add .                          OR         │\n" +
         "│ git add <file>                                │\n" +
         "└───────────────────────────────────────────────┘"
     );
