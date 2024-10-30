@@ -10,7 +10,7 @@ const program = new Command();
 program
   .name("ai-commit-message")
   .description("AI-powered git commit message generator")
-  .version("1.2.7");
+  .version("1.2.8");
 
 program
   .command("config")
