@@ -7,7 +7,7 @@
 
 ## 🎥 Demo
 
-https://github.com/username/ai-commit-message/raw/main/media/demo_ai-commit-message.mp4
+![Demo of AI Commit Message](media/demo_ai-commit-message.gif)
 
 ## ✨ Features
 
