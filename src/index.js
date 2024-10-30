@@ -37,7 +37,7 @@ async function generateCommitMessage(autoCommit = false) {
 
   const prompt = `Generate a concise, meaningful git commit message for the following changes. 
 Follow the Conventional Commits format (type(scope): description). 
-The message should be under 50 characters.
+The message should be under 50 characters. And DO NOT include any other text.
 Changes:
 ${diff}`;
 
@@ -46,12 +46,12 @@ ${diff}`;
   
   // If token count is greater than or equal to 1M, switch to pro model
   const finalModel = tokenCount.totalTokens >= 1000000 ? 
-    (console.log(chalk.yellow(`Switching to pro model: gemini-1.5-pro as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-pro" })) : 
-    (console.log(chalk.green(`Using flash model: gemini-1.5-flash as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-flash" }));
+    (console.log(chalk.yellow(`Switching to 'gemini-1.5-pro' as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-pro" })) : 
+    (console.log(chalk.green(`Using 'gemini-1.5-flash' as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-flash" }));
 
   const result = await finalModel.generateContent(prompt, {
-    maxOutputTokens: 50,
-    temperature: 1,
+    maxOutputTokens: 20,
+    temperature: 0.6,
   });
   const message = result.response.text().trim();
 
