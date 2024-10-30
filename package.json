@@ -1,12 +1,24 @@
 {
     "name": "ai-commit-message",
-    "version": "1.2.4", 
+    "version": "1.2.5", 
     "description": "AI-powered git commit message generator using Gemini API",
     "main": "src/index.js",
     "bin": {
         "ai-commit-message": "./bin/cli.js"
     },
     "keywords": [
+        "ai-commit-message",
+        "ai-commit",
+        "ai-commit-generator",
+        "ai-commit-tool",
+        "ai-commit-cli",
+        "commit-message-generator",
+        "commit-message-tool",
+        "commit-message-cli",
+        "commit-message-with-ai",
+        "commit-message-generator-with-ai",
+        "commit-message-tool-with-ai",
+        "commit-message-cli-with-ai",
         "AI commit message generator",
         "npm package",
         "npm package for commit messages",
