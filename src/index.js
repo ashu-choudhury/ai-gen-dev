@@ -1,6 +1,7 @@
 import simpleGit from "simple-git";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getApiKey } from "./config.js";
+import chalk from "chalk"; // Added import for chalk
 
 const git = simpleGit();
 

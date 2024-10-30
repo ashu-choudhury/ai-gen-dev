@@ -1,6 +1,6 @@
 {
     "name": "ai-commit-message",
-    "version": "1.2.5", 
+    "version": "1.2.6", 
     "description": "AI-powered git commit message generator using Gemini API",
     "main": "src/index.js",
     "bin": {
