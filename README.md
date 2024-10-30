@@ -5,6 +5,10 @@
 
 > Let AI craft the perfect conventional commit messages for your git repositories using Google's Gemini Pro API! 🎯
 
+## 🎥 Demo
+
+https://github.com/username/ai-commit-message/raw/main/media/demo_ai-commit-message.mp4
+
 ## ✨ Features
 
 - 🧠 Generates meaningful commit messages based on staged changes
