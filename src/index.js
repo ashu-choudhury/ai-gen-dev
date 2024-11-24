@@ -1,7 +1,7 @@
 import simpleGit from "simple-git";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getApiKey } from "./config.js";
-import chalk from "chalk"; // Added import for chalk
+import chalk from "chalk";
 
 const git = simpleGit();
 
@@ -33,23 +33,23 @@ async function generateCommitMessage(autoCommit = false) {
   const diff = await getDiff();
 
   const genAI = new GoogleGenerativeAI(getApiKey());
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" }); // Used for token count
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
   const prompt = `Generate a concise, meaningful git commit message for the following changes. 
 Follow the Conventional Commits format (type(scope): description). 
 The message should be under 50 characters. And DO NOT include any other text.
+Examples:
+"""
+feat(api): add user registration
+Test(buyers): Fix tag remarks test
+Fix(e2e): Reduce search delay
+test(suppliers): remove smoke tag
+feat: remove unused supplier pages
+"""
 Changes:
 ${diff}`;
 
-  // Check token count before generating content
-  const tokenCount = await model.countTokens(prompt);
-  
-  // If token count is greater than or equal to 1M, switch to pro model
-  const finalModel = tokenCount.totalTokens >= 1000000 ? 
-    (console.log(chalk.yellow(`Switching to 'gemini-1.5-pro' as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-pro" })) : 
-    (console.log(chalk.green(`Using 'gemini-1.5-flash' as token count is ${tokenCount.totalTokens}`)), genAI.getGenerativeModel({ model: "gemini-1.5-flash" }));
-
-  const result = await finalModel.generateContent(prompt, {
+  const result = await model.generateContent(prompt, {
     maxOutputTokens: 20,
     temperature: 0.6,
   });
@@ -57,7 +57,7 @@ ${diff}`;
 
   if (autoCommit) {
     await git.commit(message);
-    console.log(`Committed with message: ${message}`);
+    console.log(chalk.green(`Committed with message: ${message}`));
   }
 
   return message;
