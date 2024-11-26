@@ -17,7 +17,10 @@
     },
     "keywords": [
         "ai-commit-message",
-        "ai-commit",
+        "ai commit message",
+        "ai commit",
+        "git ai",
+        "git commit",
         "ai-commit-generator",
         "ai-commit-tool",
         "ai-commit-cli",
@@ -48,7 +51,13 @@
         "AI in software development",
         "git automation tools",
         "developer productivity tools",
-        "AI-driven commit message generation"
+        "AI-driven commit message generation",
+        "AI commit automation",
+        "AI git integration",
+        "AI-enhanced git workflow",
+        "smart commit messages",
+        "intelligent commit messages",
+        "AI commit message assistant"
     ],
     "scripts": {
         "test": "jest",
