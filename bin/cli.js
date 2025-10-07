@@ -71,5 +71,7 @@ program
   });
 // ----- Future Commands Placeholder -----
 // e.g., changelog generator, version bumping, etc.
-
+if (process.argv.length <= 2) {
+  program.outputHelp(chalk.cyan);
+}
 program.parse();
