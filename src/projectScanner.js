@@ -11,9 +11,11 @@ import { isBinaryFileSync } from "isbinaryfile";
  * }
  * 
  * @param {string} rootDir - root folder to scan
+ * @param {object} options - optional settings
+ * @param {string[]} options.skipDirs - additional folders to skip (default: common cache/build folders)
  * @returns {object} - { filePath: content }
  */
-export async function scanProject(rootDir = process.cwd()) {
+export async function scanProject(rootDir = process.cwd(), options = {}) {
   const gitignorePath = path.join(rootDir, ".gitignore");
   let ig = ignore();
 
@@ -23,6 +25,18 @@ export async function scanProject(rootDir = process.cwd()) {
     ig = ig.add(gitignoreContent);
   }
 
+  const defaultSkipDirs = [
+    "node_modules",
+    ".next",
+    ".expo",
+    ".cache",
+    "dist",
+    "out",
+    ".turbo",
+  ];
+
+  const skipDirs = options.skipDirs || defaultSkipDirs;
+
   const projectFiles = {};
 
   function walk(dir) {
@@ -31,10 +45,14 @@ export async function scanProject(rootDir = process.cwd()) {
       const fullPath = path.join(dir, file);
       const relativePath = path.relative(rootDir, fullPath);
 
-      // Skip ignored files
+      // Skip ignored files/folders
       if (ig.ignores(relativePath)) continue;
 
       const stats = fs.statSync(fullPath);
+
+      // Skip default cache/build directories
+      if (stats.isDirectory() && skipDirs.includes(file)) continue;
+
       if (stats.isDirectory()) {
         walk(fullPath); // Recurse into subfolders
       } else {
