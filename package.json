@@ -1,6 +1,6 @@
 {
     "name": "ai-gen-dev",
-    "version": "0.0.1",
+    "version": "0.0.2",
 "description": "AI-Gen-Dev: An AI-powered developer toolkit for generating intelligent Git commit messages and comprehensive README.md files using the Gemini API, automating repetitive tasks and boosting productivity.",
     "author": "ashu-choudhury",
     "homepage": "https://github.com/ashu-choudhury/ai-gen-dev",
@@ -13,7 +13,7 @@
     },
     "main": "src/index.js",
     "bin": {
-        "ai-commit-message": "bin/cli.js"
+        "ai-gen-dev": "bin/cli.js"
     },
     "keywords": [
         "ai-commit-message",
