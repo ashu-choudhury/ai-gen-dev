@@ -26,14 +26,12 @@ export async function scanProject(rootDir = process.cwd(), options = {}) {
   const projectFiles = {};
 
   /**
-   * Load `.gitignore` in current directory and merge with parent ignore rules.
-   * Each directory may have its own `.gitignore`, and we merge hierarchically.
+   * Load `.gitignore` in current directory and merge with parent rules.
+   * Instead of clone(), we pass parent rules as array.
    */
-  function loadIgnore(currentDir, parentIgnore) {
-    let ig = ignore();
-    if (parentIgnore) {
-      ig = parentIgnore.clone();
-    }
+  function loadIgnore(currentDir, parentRules = []) {
+    const ig = ignore();
+    ig.add(parentRules);
 
     const gitignorePath = path.join(currentDir, ".gitignore");
     if (fs.existsSync(gitignorePath)) {
@@ -51,9 +49,12 @@ export async function scanProject(rootDir = process.cwd(), options = {}) {
   /**
    * Recursive walk function that respects per-directory `.gitignore`.
    */
-  function walk(dir, currentIgnore) {
-    const ig = loadIgnore(dir, currentIgnore);
+  function walk(dir, parentRules = []) {
+    const ig = loadIgnore(dir, parentRules);
     const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+    // Extract current rules for children directories
+    const currentRules = ig._rules.map(r => r.pattern);
 
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
@@ -64,9 +65,7 @@ export async function scanProject(rootDir = process.cwd(), options = {}) {
       if (skipDirs.includes(entry.name)) continue;
 
       if (entry.isDirectory()) {
-        // Skip if folder is ignored by gitignore
-        if (ig.ignores(path.relative(rootDir, fullPath + "/"))) continue;
-        walk(fullPath, ig);
+        walk(fullPath, currentRules);
       } else {
         // Skip binary files
         if (isBinaryFileSync(fullPath)) continue;
@@ -81,6 +80,6 @@ export async function scanProject(rootDir = process.cwd(), options = {}) {
     }
   }
 
-  walk(rootDir, null);
+  walk(rootDir, []);
   return projectFiles;
 }
