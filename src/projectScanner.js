@@ -27,45 +27,49 @@ export async function scanProject(rootDir = process.cwd(), options = {}) {
 
   /**
    * Load `.gitignore` in current directory and merge with parent rules.
-   * Instead of clone(), we pass parent rules as array.
+   * Returns the combined array of patterns and an `ignore` instance.
    */
   function loadIgnore(currentDir, parentRules = []) {
     const ig = ignore();
     ig.add(parentRules);
 
     const gitignorePath = path.join(currentDir, ".gitignore");
+    let currentRules = [];
+
     if (fs.existsSync(gitignorePath)) {
       try {
         const content = fs.readFileSync(gitignorePath, "utf8");
-        ig.add(content);
+        currentRules = content
+          .split(/\r?\n/)
+          .map(line => line.trim())
+          .filter(line => line && !line.startsWith("#"));
+        ig.add(currentRules);
       } catch (e) {
         console.warn(`⚠️ Could not read .gitignore at ${gitignorePath}: ${e.message}`);
       }
     }
 
-    return ig;
+    // Combine parent + current rules
+    return { ig, combinedRules: [...parentRules, ...currentRules] };
   }
 
   /**
    * Recursive walk function that respects per-directory `.gitignore`.
    */
   function walk(dir, parentRules = []) {
-    const ig = loadIgnore(dir, parentRules);
+    const { ig, combinedRules } = loadIgnore(dir, parentRules);
     const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-    // Extract current rules for children directories
-    const currentRules = ig._rules.map(r => r.pattern);
 
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       const relativePath = path.relative(rootDir, fullPath);
 
-      // Skip ignored or default skip directories
+      // Skip ignored paths
       if (ig.ignores(relativePath)) continue;
       if (skipDirs.includes(entry.name)) continue;
 
       if (entry.isDirectory()) {
-        walk(fullPath, currentRules);
+        walk(fullPath, combinedRules);
       } else {
         // Skip binary files
         if (isBinaryFileSync(fullPath)) continue;
