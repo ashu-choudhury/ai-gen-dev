@@ -54,3 +54,11 @@ export async function getRecentCommits(count = 20) {
     throw new Error("❌ Could not retrieve git history.");
   }
 }
+
+export async function getStagedFiles() {
+  const diff = await git.diff(["--staged", "--name-only"]);
+  if (!diff) {
+    return [];
+  }
+  return diff.split("\n").filter((file) => file.trim() !== "");
+}

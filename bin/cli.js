@@ -6,7 +6,7 @@ import { generateCommitMessage } from "../src/index.js";
 import { generateReadme } from "../src/readmeGenerator.js";
 import { setApiKey } from "../src/config.js";
 import { generateChangelog } from "../src/changelogGenerator.js";
-import { reviewFile } from "../src/codeReviewer.js";
+import { reviewFile, reviewStagedFiles } from "../src/codeReviewer.js";
 
 const program = new Command();
 
@@ -103,13 +103,17 @@ program
 // ----- Code Reviewer -----
 program
   .command("review")
-  .description("Generate an AI-powered code review for a specific file")
-  .argument("<file>", "Path to the file to review")
+  .description("Generate an AI-powered code review for a specific file or all staged files")
+  .argument("[file]", "Path to the file to review. If omitted, reviews all staged files.")
   .action(async (file) => {
     try {
-      await reviewFile(file);
+      if (file) {
+        await reviewFile(file);
+      } else {
+        await reviewStagedFiles();
+      }
     } catch (err) {
-      console.error(chalk.red(`❌ Failed to review file: ${err.message}`));
+      console.error(chalk.red(`❌ Error: ${err.message}`));
       process.exit(1);
     }
   });
