@@ -48,6 +48,24 @@ export function appendToFile(filePath, content) {
 }
 
 /**
+ * Read content from a file.
+ * @param {string} filePath - Path to the file
+ * @returns {string} - The content of the file
+ */
+export function readFileContent(filePath) {
+  const fullPath = path.resolve(filePath);
+  try {
+    if (!fs.existsSync(fullPath)) {
+      throw new Error(`File not found at: ${fullPath}`);
+    }
+    return fs.readFileSync(fullPath, "utf8");
+  } catch (err) {
+    console.error(chalk.red(`❌ Failed to read file: ${err.message}`));
+    throw err;
+  }
+}
+
+/**
  * Placeholder for future file utilities.
  * Examples:
  * - readFileContent(filePath)
@@ -57,4 +75,5 @@ export function appendToFile(filePath, content) {
 export const fileUtils = {
   createFile,
   appendToFile,
+  readFileContent,
 };

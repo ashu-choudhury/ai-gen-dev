@@ -98,3 +98,80 @@ Do not include, display, or reference any project structure, file names, folders
 
   return result.response.text().trim();
 }
+
+/**
+ * Generate AI-based CHANGELOG content
+ * @param {string} commitHistory - string representation of recent commits
+ * @param {string} extraInstructions - optional instructions for AI to customize CHANGELOG
+ * @returns {string} - generated CHANGELOG content
+ */
+export async function generateAIChangelog(commitHistory, extraInstructions = "") {
+  const genAI = new GoogleGenerativeAI(getApiKey());
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+
+  const prompt = `
+You are an expert AI software engineer and release manager.
+I will provide you with a list of recent git commits.
+Your task is to generate a professional, user-friendly **CHANGELOG.md** file based on these commits.
+
+Follow these instructions **strictly**:
+
+1.  **Analyze the commit messages** to understand the changes (features, fixes, chores, etc.).
+2.  **Group related changes** under appropriate headings like "🚀 Features", "🐛 Bug Fixes", "🧹 Maintenance", etc.
+3.  **Rewrite commit messages** into clear, human-readable changelog entries. Do not just list the raw commit messages.
+4.  **Omit chore/repo-management commits** (e.g., "chore: update dependencies", "docs: update README") unless they represent a significant change.
+5.  **Format the output in Markdown** following the "Keep a Changelog" standard, but in a simplified way.
+6.  Start with a main heading \`# Changelog\`.
+7.  If extra instructions are provided, prioritize them.
+
+Here is the recent commit history:
+${commitHistory}
+
+Generate the CHANGELOG.md content now.
+${extraInstructions ? `\nUser instructions: ${extraInstructions}` : ""}
+`;
+
+  const result = await model.generateContent(prompt, {
+    temperature: 0.6,
+  });
+
+  return result.response.text().trim();
+}
+
+/**
+ * Generate an AI-based code review for a given file.
+ * @param {string} code - The source code to review.
+ * @param {string} filePath - The path of the file being reviewed.
+ * @returns {string} - The generated code review.
+ */
+export async function generateAICodeReview(code, filePath) {
+  const genAI = new GoogleGenerativeAI(getApiKey());
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+
+  const prompt = `
+You are an expert AI software engineer and code reviewer.
+Your task is to provide a thorough and constructive code review for the following file.
+
+File Path: ${filePath}
+
+Code:
+\`\`\`
+${code}
+\`\`\`
+
+Please analyze the code and provide feedback on the following aspects:
+1.  **Potential Bugs**: Identify any logical errors, edge cases not handled, or potential runtime issues.
+2.  **Best Practices**: Check if the code follows common language-specific and general programming best practices.
+3.  **Performance**: Suggest any optimizations that could improve performance without sacrificing readability.
+4.  **Readability & Maintainability**: Comment on code style, clarity, naming conventions, and overall structure. Suggest improvements to make the code easier to understand and maintain.
+5.  **Security**: Point out any potential security vulnerabilities.
+
+Format your review clearly with headings for each section. Provide specific code snippets where necessary to illustrate your points. Be constructive and professional.
+`;
+
+  const result = await model.generateContent(prompt, {
+    temperature: 0.4,
+  });
+
+  return result.response.text().trim();
+}
