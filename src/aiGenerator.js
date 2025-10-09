@@ -137,3 +137,41 @@ ${extraInstructions ? `\nUser instructions: ${extraInstructions}` : ""}
 
   return result.response.text().trim();
 }
+
+/**
+ * Generate an AI-based code review for a given file.
+ * @param {string} code - The source code to review.
+ * @param {string} filePath - The path of the file being reviewed.
+ * @returns {string} - The generated code review.
+ */
+export async function generateAICodeReview(code, filePath) {
+  const genAI = new GoogleGenerativeAI(getApiKey());
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+
+  const prompt = `
+You are an expert AI software engineer and code reviewer.
+Your task is to provide a thorough and constructive code review for the following file.
+
+File Path: ${filePath}
+
+Code:
+\`\`\`
+${code}
+\`\`\`
+
+Please analyze the code and provide feedback on the following aspects:
+1.  **Potential Bugs**: Identify any logical errors, edge cases not handled, or potential runtime issues.
+2.  **Best Practices**: Check if the code follows common language-specific and general programming best practices.
+3.  **Performance**: Suggest any optimizations that could improve performance without sacrificing readability.
+4.  **Readability & Maintainability**: Comment on code style, clarity, naming conventions, and overall structure. Suggest improvements to make the code easier to understand and maintain.
+5.  **Security**: Point out any potential security vulnerabilities.
+
+Format your review clearly with headings for each section. Provide specific code snippets where necessary to illustrate your points. Be constructive and professional.
+`;
+
+  const result = await model.generateContent(prompt, {
+    temperature: 0.4,
+  });
+
+  return result.response.text().trim();
+}
