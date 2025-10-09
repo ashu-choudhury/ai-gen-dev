@@ -100,6 +100,50 @@ This command generates a professional `README.md` file for your project.
     ai-gen-dev readme --create --message "Highlight the use of React and Tailwind CSS for the UI components"
     ```
 
+### Generating CHANGELOG Files (`ai-gen-dev changelog`)
+
+This command generates a `CHANGELOG.md` file based on your recent commit history.
+
+*   **Preview the generated CHANGELOG:** This will display the generated changelog content in your terminal without saving it to a file.
+
+    ```bash
+    ai-gen-dev changelog
+    ```
+
+*   **Generate and save CHANGELOG.md:** This will create or overwrite the `CHANGELOG.md` file in your project's root directory.
+
+    ```bash
+    ai-gen-dev changelog --create
+    ```
+
+*   **Provide specific instructions for CHANGELOG generation:** You can offer guidance to the AI for tailoring the changelog.
+
+    ```bash
+    ai-gen-dev changelog --message "Focus on user-facing features and bug fixes, group them by version"
+    ```
+
+    Or with saving:
+
+    ```bash
+    ai-gen-dev changelog --create --message "Ensure all security-related fixes are clearly marked"
+    ```
+
+### Code Review (`ai-gen-dev review`)
+
+This command utilizes AI to provide a code review for a specified file or all staged files.
+
+*   **Review a specific file:**
+
+    ```bash
+    ai-gen-dev review path/to/your/file.js
+    ```
+
+*   **Review all staged files:**
+
+    ```bash
+    ai-gen-dev review
+    ```
+
 ### Configuration (`ai-gen-dev config`)
 
 As mentioned in the installation steps, this command is used to set your Gemini API key.
@@ -112,8 +156,10 @@ ai-gen-dev config <YOUR_GEMINI_API_KEY>
 
 *   **AI-Powered Commit Messages:** Generates descriptive and conventionally formatted commit messages, saving you time and improving commit history clarity.
 *   **Intelligent README Generation:** Automatically creates comprehensive `README.md` files by analyzing your project's structure and code content.
-*   **Customizable AI Prompts:** Allows you to provide specific instructions to the AI for both commit messages and README generation, ensuring the output meets your exact needs.
-*   **Seamless Git Integration:** Works directly with your Git repository, understanding staged changes for commit messages and scanning your project for README generation.
+*   **Automated CHANGELOG Generation:** Creates user-friendly changelogs from recent commit history, keeping your project documentation up-to-date.
+*   **AI-Assisted Code Review:** Provides insightful code reviews to help identify potential bugs, suggest improvements, and ensure adherence to best practices.
+*   **Customizable AI Prompts:** Allows you to provide specific instructions to the AI for commit messages, READMEs, changelogs, and code reviews, ensuring the output meets your exact needs.
+*   **Seamless Git Integration:** Works directly with your Git repository, understanding staged changes for commit messages and scanning your project for documentation generation.
 *   **Developer-Friendly CLI:** Easy-to-use command-line interface with clear instructions and helpful feedback.
 *   **Secure API Key Management:** Safely stores your Gemini API key locally using a configuration management library.
 *   **Extensible Architecture:** Designed with modularity in mind, allowing for future expansion with more AI-driven developer tools.
@@ -139,3 +185,4 @@ We're excited to build this tool alongside our community and make AI-driven deve
 *   **Project Scanning:** For README generation, AI-Gen-Dev scans your project's files (respecting `.gitignore`). Ensure your `.gitignore` is up-to-date to avoid unnecessary noise in the AI's analysis.
 *   **Conventional Commits:** The `git` command aims to adhere to Conventional Commits standards. Familiarize yourself with this standard for better commit history management.
 *   **Node.js Version:** The project is developed and tested with Node.js v18.0.0 and above. Ensure your Node.js environment meets this requirement.
+*   **Dependencies:** Make sure to run `npm install` to install all necessary dependencies before running the CLI.
