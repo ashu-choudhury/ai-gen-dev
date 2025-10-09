@@ -37,3 +37,20 @@ export async function commitMessage(message) {
   await git.commit(message);
   console.log(chalk.green(`✅ Committed with message:\n${message}`));
 }
+
+export async function getRecentCommits(count = 20) {
+  try {
+    const log = await git.log({
+      n: count,
+      format: {
+        hash: "%h",
+        date: "%ar",
+        message: "%s",
+        author: "%an",
+      },
+    });
+    return log.all;
+  } catch (err) {
+    throw new Error("❌ Could not retrieve git history.");
+  }
+}

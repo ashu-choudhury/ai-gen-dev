@@ -5,6 +5,7 @@ import chalk from "chalk";
 import { generateCommitMessage } from "../src/index.js";
 import { generateReadme } from "../src/readmeGenerator.js";
 import { setApiKey } from "../src/config.js";
+import { generateChangelog } from "../src/changelogGenerator.js";
 
 const program = new Command();
 
@@ -69,6 +70,35 @@ program
       process.exit(1);
     }
   });
+
+// ----- Generate CHANGELOG -----
+program
+  .command("changelog")
+  .description("Generate CHANGELOG.md for the project")
+  .option("-c, --create", "Automatically save CHANGELOG.md to project root")
+  .option("-m, --message <text>", "Optional short instruction for AI to focus on")
+  .action(async (options) => {
+    try {
+      const changelogContent = await generateChangelog({
+        previewOnly: !options.create,
+        extraPrompt: options.message || "",
+      });
+
+      if (!options.create) {
+        console.log("\n💡 Generated CHANGELOG preview:\n");
+        console.log(chalk.cyan(changelogContent));
+        console.log("\nUse '-c' to save this CHANGELOG.md in project root.");
+      } else {
+        console.log(
+          chalk.green("\n✅ CHANGELOG.md generated and saved successfully.")
+        );
+      }
+    } catch (err) {
+      console.error(chalk.red("❌ Failed to generate CHANGELOG:", err.message));
+      process.exit(1);
+    }
+  });
+
 // ----- Future Commands Placeholder -----
 // e.g., changelog generator, version bumping, etc.
 if (process.argv.length <= 2) {
