@@ -7,6 +7,9 @@ import { generateReadme } from "../src/readmeGenerator.js";
 import { setApiKey } from "../src/config.js";
 import { generateChangelog } from "../src/changelogGenerator.js";
 import { reviewFile, reviewStagedFiles } from "../src/codeReviewer.js";
+if (process.env.AI_GEN_DEV_RUNNING) process.exit(0);
+process.env.AI_GEN_DEV_RUNNING = '1';
+
 
 const program = new Command();
 
