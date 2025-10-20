@@ -118,9 +118,8 @@ program
     }
   });
 
-// ----- Future Commands Placeholder -----
-// e.g., changelog generator, version bumping, etc.
-if (process.argv.length <= 2) {
+program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
   program.outputHelp(chalk.cyan);
 }
-program.parse();
