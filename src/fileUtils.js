@@ -66,6 +66,22 @@ export function readFileContent(filePath) {
 }
 
 /**
+ * Ensure a directory exists, creating it if needed.
+ * @param {string} dirPath - Directory path to ensure.
+ * @returns {string} - Resolved directory path.
+ */
+export function ensureDirectory(dirPath) {
+  const resolvedPath = path.resolve(dirPath);
+  try {
+    fs.mkdirSync(resolvedPath, { recursive: true });
+    return resolvedPath;
+  } catch (err) {
+    console.error(chalk.red(`❌ Failed to create directory: ${err.message}`));
+    throw err;
+  }
+}
+
+/**
  * Placeholder for future file utilities.
  * Examples:
  * - readFileContent(filePath)
@@ -76,4 +92,5 @@ export const fileUtils = {
   createFile,
   appendToFile,
   readFileContent,
+  ensureDirectory,
 };

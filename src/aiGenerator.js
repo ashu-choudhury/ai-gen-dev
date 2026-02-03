@@ -175,3 +175,51 @@ Format your review clearly with headings for each section. Provide specific code
 
   return result.response.text().trim();
 }
+
+/**
+ * Generate an AI-based pull request description.
+ * @param {object} payload - PR context
+ * @param {string} payload.diff - staged diff
+ * @param {Array} payload.commits - recent commits
+ * @param {Array} payload.files - staged files
+ * @param {string} payload.userMessage - optional instruction for AI to focus on
+ * @returns {string} - generated PR title and body
+ */
+export async function generateAIPullRequest(payload) {
+  const { diff, commits, files, userMessage = "" } = payload;
+  const genAI = new GoogleGenerativeAI(getApiKey());
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+
+  const commitSummary = commits
+    .map((commit) => `- ${commit.hash}: ${commit.message} (${commit.date})`)
+    .join("\n");
+  const fileSummary = files.map((file) => `- ${file}`).join("\n");
+
+  const prompt = `
+You are an expert software engineer writing a pull request description.
+
+Output requirements:
+- Provide a concise PR title on the first line.
+- Provide a detailed PR body in Markdown after the title.
+- Use sections: Summary, Changes, Testing, Notes (if needed).
+- Be clear, concise, and helpful for reviewers.
+
+Context:
+User instruction: ${userMessage || "None"}
+
+Staged files:
+${fileSummary || "(none)"}
+
+Recent commits:
+${commitSummary || "(none)"}
+
+Staged diff:
+${diff}
+`;
+
+  const result = await model.generateContent(prompt, {
+    temperature: 0.5,
+  });
+
+  return result.response.text().trim();
+}
