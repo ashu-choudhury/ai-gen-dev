@@ -144,6 +144,34 @@ This command utilizes AI to provide a code review for a specified file or all st
     ai-gen-dev review
     ```
 
+### Generating Pull Request Templates (`ai-gen-dev pr`)
+
+This command generates a PR title and body based on your staged changes.
+
+*   **Preview the PR template:**
+
+    ```bash
+    ai-gen-dev pr
+    ```
+
+*   **Generate and save the PR template:**
+
+    ```bash
+    ai-gen-dev pr --create
+    ```
+
+*   **Provide specific instructions for PR generation:**
+
+    ```bash
+    ai-gen-dev pr --message "Highlight API changes and migration steps"
+    ```
+
+*   **Save to a custom output path:**
+
+    ```bash
+    ai-gen-dev pr --create --output .github/PULL_REQUEST_TEMPLATE.md
+    ```
+
 ### Configuration (`ai-gen-dev config`)
 
 As mentioned in the installation steps, this command is used to set your Gemini API key.
@@ -158,6 +186,7 @@ ai-gen-dev config <YOUR_GEMINI_API_KEY>
 *   **Intelligent README Generation:** Automatically creates comprehensive `README.md` files by analyzing your project's structure and code content.
 *   **Automated CHANGELOG Generation:** Creates user-friendly changelogs from recent commit history, keeping your project documentation up-to-date.
 *   **AI-Assisted Code Review:** Provides insightful code reviews to help identify potential bugs, suggest improvements, and ensure adherence to best practices.
+*   **AI-Generated PR Templates:** Builds a PR-ready title and body from staged changes, helping reviewers understand scope faster.
 *   **Customizable AI Prompts:** Allows you to provide specific instructions to the AI for commit messages, READMEs, changelogs, and code reviews, ensuring the output meets your exact needs.
 *   **Seamless Git Integration:** Works directly with your Git repository, understanding staged changes for commit messages and scanning your project for documentation generation.
 *   **Developer-Friendly CLI:** Easy-to-use command-line interface with clear instructions and helpful feedback.

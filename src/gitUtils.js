@@ -62,3 +62,7 @@ export async function getStagedFiles() {
   }
   return diff.split("\n").filter((file) => file.trim() !== "");
 }
+
+export async function getStagedDiff() {
+  return git.diff(["--staged"]);
+}

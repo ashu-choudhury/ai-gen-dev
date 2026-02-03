@@ -7,6 +7,7 @@ import { generateReadme } from "../src/readmeGenerator.js";
 import { setApiKey } from "../src/config.js";
 import { generateChangelog } from "../src/changelogGenerator.js";
 import { reviewFile, reviewStagedFiles } from "../src/codeReviewer.js";
+import { generatePullRequest } from "../src/pullRequestGenerator.js";
 if (process.env.AI_GEN_DEV_RUNNING) process.exit(0);
 process.env.AI_GEN_DEV_RUNNING = '1';
 
@@ -117,6 +118,32 @@ program
       }
     } catch (err) {
       console.error(chalk.red(`❌ Error: ${err.message}`));
+      process.exit(1);
+    }
+  });
+
+// ----- Generate PR Template -----
+program
+  .command("pr")
+  .description("Generate a pull request template from staged changes")
+  .option("-c, --create", "Automatically save PR template to .github/pull_request_template.md")
+  .option("-m, --message <text>", "Optional short instruction for AI to focus on")
+  .option("-o, --output <path>", "Optional custom output path for PR template")
+  .action(async (options) => {
+    try {
+      const { title, body } = await generatePullRequest({
+        previewOnly: !options.create,
+        extraPrompt: options.message || "",
+        outputPath: options.output || ".github/pull_request_template.md",
+      });
+
+      if (!options.create) {
+        console.log("\n💡 Generated PR Preview:\n");
+        console.log(chalk.cyan(`${title}\n\n${body}`));
+        console.log("\nUse '-c' to save this PR template.");
+      }
+    } catch (err) {
+      console.error(chalk.red("❌ Failed to generate PR template:", err.message));
       process.exit(1);
     }
   });
